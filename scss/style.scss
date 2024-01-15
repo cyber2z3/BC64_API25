@@ -1,0 +1,225 @@
+// h1{
+//     background-color: blue;
+// }
+
+//---- variable ---------
+$color-blue-100: #2c72dc;
+$color-blue-200: #1d355e;
+$color-gray-100: #f7f9fe;
+$color-yellow-100: #f9d30f;
+$color-white: #ffffff;
+
+//tạo ra biến lưu trữ giá trị font-size:
+$fs-title: 60px;
+$fs-nav: 16px;
+$fs-sub-title: 20px;
+$fs-paragraph: 18px;
+$fs-mini-title: 20px;
+
+//font weight:
+$fw-normal: 400;
+$fw-bold: 700;
+$fw-semi-bold: 600;
+
+//--------------------------
+//Nested Route
+//Cơ chế viết selector mà gọi từ cha vào con. Ở đây, các selector con sẽ được viết nằm
+//bên trong selector cha.
+//=> Lợi ích: tránh lặp code
+//=> Bảo trì dự án: code dễ hiểu dễ bảo trì
+
+//parent selector
+//là một dạng sử dụng dấu & đại diện cho selector cha nằm gần nhất
+.demo {
+  .demo1 {
+    background-color: rebeccapurple;
+    &:hover {
+      background-color: green;
+    }
+  }
+  h2 {
+    font-size: 35px;
+  }
+  background-color: red($color: #000000);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+}
+
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+// a{
+//     text-decoration: none;
+// }
+
+//Mixin
+@mixin styleEleA($fs, $color, $fw) {
+  text-decoration: none;
+  font-size: $fs;
+  color: $color;
+  font-weight: $fw;
+}
+@mixin styleText($fs, $color, $fw) {
+  font-size: $fs;
+  color: $color;
+  font-weight: $fw;
+}
+@mixin styleButton($bg, $color, $shadow) {
+  border: 2px solid $color-blue-100;
+  background-color: $bg;
+  color: $color;
+  box-shadow: $shadow;
+  border-radius: 12px;
+  padding: 15px 35px;
+  transition: all 0.5s;
+  cursor: pointer;
+
+  //hover => đổi màu chữ và màu nền
+  &:hover {
+    background-color: $color;
+    color: $bg;
+  }
+}
+
+header {
+  padding: 20px 0;
+  background-color: $color-gray-100;
+  box-shadow: rgba(255, 255, 255, 0.24) 0px;
+
+  .header_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header_logo {
+      a {
+        @include styleEleA(26px, $color-blue-100, $fw-bold);
+      }
+    }
+
+    .header_nav {
+      ul {
+        list-style: none;
+        display: flex;
+
+        li {
+          margin: 0 10px;
+          position: relative;
+          &.active {
+            a {
+              color: $color-blue-100;
+              &::before {
+                width: 100%;
+              }
+            }
+          }
+
+          a {
+            @include styleEleA($fs-nav, $color-blue-200, $fw-normal);
+
+            &:before {
+              content: "";
+              position: absolute;
+              width: 0;
+              height: 3px;
+              background-color: $color-blue-100;
+              bottom: -10px;
+              left: 0;
+              transition: all 0.5s;
+            }
+          }
+
+          &:hover {
+            a {
+              color: $color-blue-100;
+              &:before {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.banner {
+  padding: 50px 0;
+  background-image: url(../image/product-header-bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+
+  .banner_content {
+    display: flex;
+    align-items: center;
+
+    .banner_text {
+      h1 {
+        @include styleText($fs-title, $color-blue-100, $fw-bold);
+      }
+
+      .sub-title {
+        @include styleText($fs-sub-title, $color-blue-200, $fw-semi-bold);
+      }
+
+      p {
+        @include styleText($fs-nav, $color-blue-200, $fw-normal);
+      }
+
+      .group-button {
+        .more_info {
+          @include styleButton($color-white, $color-blue-100, none);
+        }
+
+        .shop {
+          @include styleButton(
+            $color-blue-100,
+            $color-white,
+            rgba(255, 255, 255, 0.24) 0px 3px 8px
+          );
+        }
+      }
+    }
+
+    .banner_image {
+      img {
+        width: 70%;
+        text-align: right;
+      }
+    }
+  }
+}
+
+.product {
+  padding: 50px 0;
+
+  .product_title {
+    text-align: center;
+    @include styleText($fs-mini-title, $color-blue-200, $fw-semi-bold);
+  }
+
+  .product_content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    .product_item {
+      img {
+        width: 100%;
+      }
+
+      .item_text {
+      }
+
+      .item_action {
+      }
+    }
+  }
+}
